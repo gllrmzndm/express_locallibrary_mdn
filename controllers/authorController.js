@@ -22,9 +22,9 @@ exports.author_detail = asyncHandler(async (req, res, next) => {
 });
 
 // Display Author create form on GET.
-exports.author_create_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Author create GET");
-});
+exports.author_create_get = (req, res, next) => {
+  res.render("author_form", { title: "Create Author" });
+};
 
 // Handle Author create on POST.
 exports.author_create_post = [
@@ -32,26 +32,32 @@ exports.author_create_post = [
   body("first_name")
     .trim()
     .isLength({ min: 1 })
-    .escape.withMessage("First name must be specified")
+    .escape()
+    .withMessage("First name must be specified.")
+    .isAlphanumeric()
+    .withMessage("First name has non-alphanumeric characters."),
+  body("family_name")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Family name must be specified.")
     .isAlphanumeric()
     .withMessage("Family name has non-alphanumeric characters."),
-
   body("date_of_birth", "Invalid date of birth")
     .optional({ values: "falsy" })
     .isISO8601()
     .toDate(),
-
-  body("date_of_death", "invalid date of death")
+  body("date_of_death", "Invalid date of death")
     .optional({ values: "falsy" })
     .isISO8601()
     .toDate(),
 
-  // Process request after validation and sanitazation.
+  // Process request after validation and sanitization.
   asyncHandler(async (req, res, next) => {
-    // Extract  the validation errors from a rquest.
+    // Extract the validation errors from a request.
     const errors = validationResult(req);
 
-    // Create  Author object with escaped and  trimmed data
+    // Create Author object with escaped and trimmed data
     const author = new Author({
       first_name: req.body.first_name,
       family_name: req.body.family_name,
@@ -59,16 +65,16 @@ exports.author_create_post = [
       date_of_death: req.body.date_of_death,
     });
 
-    if (!error.isEmpty()) {
+    if (!errors.isEmpty()) {
       // There are errors. Render form again with sanitized values/errors messages.
       res.render("author_form", {
         title: "Create Author",
-        author: "author",
-        errors: "errors.array(),",
+        author: author,
+        errors: errors.array(),
       });
       return;
     } else {
-      // Data from form is valid
+      // Data from form is valid.
 
       // Save author.
       await author.save();
