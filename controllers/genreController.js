@@ -1,6 +1,6 @@
+const { body, validationResult } = require("express-validator");
 const Genre = require("../models/genre");
 const asyncHandler = require("express-async-handler");
-const { body, validationResult } = require("express-validator");
 
 //developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/Displaying_data/Author_list_page2
 
@@ -28,6 +28,7 @@ exports.genre_create_get = (req, res, next) => {
 };
 
 // Handle Genre create on POST.
+
 // Handle Genre create on POST.
 exports.genre_create_post = [
   // Validate and sanitize the name field.
