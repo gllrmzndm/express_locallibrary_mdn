@@ -18,10 +18,10 @@
     "luxon": "^3.5.0",
     "mongoose": "^8.5.1",
     "morgan": "~1.9.1",
-    "prettier": "^3.4.2",
     "pug": "2.0.0-beta11"
   },
   "devDependencies": {
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.0",
+    "prettier": "3.4.2"
   }
 }
